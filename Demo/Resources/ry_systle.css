@@ -1,0 +1,511 @@
+﻿/**{
+	font-family:"SimHei";
+}
+*/
+
+LoginDialog
+{
+background: #252525;
+max-width:438px;
+min-width:438px;
+}
+LoginDialog QFrame#titleFrame
+{
+	min-height:28px;
+	max-height:28px;
+	background:#0F0F0F;
+	border:none;
+}
+
+LoginDialog QLabel#titleLabel
+{
+	background:transparent;
+	color:#C4C4C4;
+	font-size:13px;
+	min-width:120px;
+	qproperty-alignment:AlignCenter;
+}
+
+LoginDialog QPushButton#btnClose
+{
+	background-color: transparent;
+	border:none;
+	min-height:12px;
+	max-height:12px;
+	min-width:12px;
+	max-width:12px;
+	image:url(:/icon/Tool/login_closeoff.png);
+}
+
+LoginDialog QPushButton#btnClose:hover,LoginDialog QPushButton#btnClose:pressed
+{
+	background-color: transparent;
+	border:none;
+	min-height:12px;
+	max-height:12px;
+	min-width:12px;
+	max-width:12px;
+	image:url(:/icon/Tool/login_closeon.png);
+}
+
+LoginDialog QFrame#centerFrame
+{
+	border: none;
+	background-color: #2D2D2E;
+}
+LoginDialog QFrame#LoginInfoFrame
+{
+	border: none;
+	background-color: transparent;
+	min-height:80px;
+	max-height:80px;
+}
+LoginDialog QFrame#LoginInfoFrame QLabel
+{
+	background:transparent;
+	color:#C4C4C4;
+	font-size:13px;
+	min-height:20px;
+	max-height:20px;
+	min-width:70px;
+	max-width:70px;
+}
+
+LoginDialog QLineEdit
+{
+	background: #222224;
+	color:#C4C4C4;
+	font-size:13px;
+	min-height:18px;
+	max-height:18px;
+	min-width:205px;
+	
+	border-left:1px outset #000000;
+	border-top:1px outset #000000;
+	border-right:1px inset rgba(255,255,255,0.20);
+	border-bottom:1px inset rgba(255,255,255,0.20);
+
+}
+
+LoginDialog QLineEdit:hover
+{
+	background: #222224;
+	color:#C4C4C4;
+	font-size:13px;
+	min-height:18px;
+	max-height:18px;
+	
+    border-left:1px outset #000000;
+	border-top:1px outset #000000;
+	border-right:1px inset rgba(255,255,255,0.20);
+	border-bottom:1px inset rgba(255,255,255,0.20);
+
+}
+
+/**********复选框**********/
+
+LoginDialog QCheckBox
+{
+	background:transparent;
+	border:none;
+	color:#C4C4C4;
+	font-size:13px;
+	min-width:86px;
+}
+QCheckBox:enabled,QRadioButton:enabled{
+        color:#C4C4C4;
+}
+QCheckBox:enabled:hover,QRadioButton:enabled:hover{
+        color:#C4C4C4;
+}
+QCheckBox:!enabled,QRadioButton:!enabled{
+        color:#898989;
+}
+QCheckBox::indicator,QRadioButton::indicator{
+        width: 13px;
+        height: 13px;
+}
+
+QCheckBox::indicator:unchecked {
+        image: url(:/icon/Tool/uncheck.png);
+}
+
+QCheckBox::indicator:checked {
+        image: url(:/icon/Tool/check.png);
+}
+
+QRadioButton::indicator:unchecked {
+        image: url(:/icon/Tool/radiobutton.png);
+}
+
+QRadioButton::indicator:checked {
+        image: url(:/icon/Tool/radiobutton_check.png);
+}
+
+LoginDialog QPushButton#btnUpDown[state="down"]
+{
+	border:none;
+	background:transparent;
+	min-height:16px;
+	max-height:16px;
+	max-width:16px;
+	min-width:16px;
+	image:url(:/icon/Tool/login_down.png);
+}
+LoginDialog QPushButton#btnUpDown[state="down"]:hover
+{
+	border:none;
+	background:transparent;
+	min-height:16px;
+	max-height:16px;
+	max-width:16px;
+	min-width:16px;
+	image:url(:/icon/Tool/login_downhover.png);
+}
+LoginDialog QPushButton#btnUpDown[state="up"]
+{
+	border:none;
+	background:transparent;
+	min-height:16px;
+	max-height:16px;
+	max-width:16px;
+	min-width:16px;
+
+	image:url(:/icon/Tool/login_up.png);
+}
+LoginDialog QPushButton#btnUpDown[state="up"]:hover
+{
+	border:none;
+	background:transparent;
+	min-height:16px;
+	max-height:16px;
+	max-width:16px;
+	min-width:16px;
+
+	image:url(:/icon/Tool/login_uphover.png);
+}
+
+LoginDialog QFrame#extensionFrame
+{
+	background-color: #252526;
+	border-left:1px outset #000000;
+	border-top:1px outset #000000;
+	border-right:1px inset rgba(255,255,255,0.20);
+	border-bottom:1px inset rgba(255,255,255,0.20);
+}
+LoginDialog QFrame#proxyFrame QLabel
+{
+	background:transparent;
+	color:#C4C4C4;
+	font-size:13px;
+	min-height:20px;
+	max-height:20px;
+	min-width:94px;
+	max-width:94px;
+}
+/**********下拉列表**********/
+
+LoginDialog QComboBox#proxyTypeComBobox {
+    background: #222224;
+	min-height:20px;
+	max-height:20px;
+	min-width:80px;
+	color: #C4C4C4;
+	border-left:1px outset #000000;
+	border-top:1px outset #000000;
+	border-right:1px inset rgba(255,255,255,0.20);
+	border-bottom:1px inset rgba(255,255,255,0.20);
+	font-size:13px;
+}
+QComboBox:enabled {
+        color: #C4C4C4;
+}
+QComboBox:!enabled {
+        color:#898989;
+}
+QComboBox:enabled:hover, QComboBox:enabled:focus {
+        color: #C4C4C4;
+}
+QComboBox::drop-down {
+	    margin-right:0px;
+        width: 20px;
+        border: none;
+        background: transparent;
+		image:url(:/icon/Tool/login_dropdown.png);
+		
+}
+QComboBox::drop-down:hover {
+       background: transparent;
+	   image:url(:/icon/Tool/login_dropdown.png);
+}
+
+QComboBox::down-arrow {
+        image: url(:/icon/Tool/down_arrow.svg);
+}
+QComboBox::down-arrow:off {
+        image: url(:/icon/Tool/down_arrow.svg);
+}
+QComboBox::down-arrow:hover {
+         image: url(:/icon/Tool/down_arrowon.svg);
+}
+
+QComboBox::down-arrow:on {
+         image: url(:/icon/Tool/down_arrowon.svg);
+}
+
+QComboBox QAbstractItemView {
+        border: 1px solid rgb(0, 0, 0);
+        background: #1E1E20;
+        outline: none;
+		font-size:12px;
+}
+QComboBox QAbstractItemView::item {
+		background: #1E1E20;
+        height: 20px;
+        color: #C4C4C4;
+		border-bottom: 1px solid rgba(30, 30, 32, 0.8);
+		font-size:12px;
+
+}
+QComboBox QAbstractItemView::item:selected {
+        background: #0F0F0F;
+        color: #FFFFFF;
+		border-bottom: 1px solid rgba(15, 15, 15,0.8);
+}
+QComboBox QAbstractItemView::item:hover {
+        background: #0F0F0F;
+        color: #FFFFFF;
+		border-bottom: 1px solid rgba(15, 15, 15,0.8);
+}
+
+
+
+LoginDialog QPushButton#btnLogin
+{
+	background:transparent;
+	color:#FF961B;
+	min-height:32px;
+	max-height:32px;
+	min-width:110px;
+	max-width:110px;
+	font-size:14px;
+	border-image:url(:/icon/Tool/login_button.png);
+	qproperty-icon:url(:/icon/Tool/login_ok.png);
+    background-repeat: no-repeat;
+}
+
+LoginDialog QPushButton#btnLogin:hover
+{
+	background:transparent;
+	color:#FF961B;
+	min-height:32px;
+	max-height:32px;
+	min-width:110px;
+	max-width:110px;
+	font-size:14px;
+	border-image:url(:/icon/Tool/login_buttonhover.png);
+	 background-repeat: no-repeat;
+	qproperty-icon:url(:/icon/Tool/login_ok.png);
+	
+}
+
+LoginDialog QPushButton#btnCancel
+{
+	background:transparent;
+	color:#FF961B;
+	min-height:32px;
+	max-height:32px;
+	min-width:110px;
+	max-width:110px;
+	font-size:14px;
+	border-image:url(:/icon/Tool/login_button.png);
+	qproperty-icon:url(:/icon/Tool/login_cancel.png);
+    background-repeat: no-repeat;
+}
+
+LoginDialog QPushButton#btnCancel:hover
+{
+	background:transparent;
+	color:#FF961B;
+	min-height:32px;
+	max-height:32px;
+	min-width:110px;
+	max-width:110px;
+	font-size:14px;
+	border-image:url(:/icon/Tool/login_buttonhover.png);
+	qproperty-icon:url(:/icon/Tool/login_cancel.png);
+    background-repeat: no-repeat;
+}
+
+LoginDialog QTextEdit#textEdit
+{
+	border:none;
+	background:transparent;
+	font-size:12px;
+	color:#C4C4C4;
+	min-height:90px;
+	
+}
+
+LoginDialog QTextEdit#textEdit2
+{
+	border:none;
+	background:transparent;
+	font-size:12px;
+	color:#FF961B;
+	min-height:40px;
+	
+}
+
+
+LoginDialog QPushButton#btnCreateHW, LoginDialog QPushButton#btnRegisterLCN
+{
+background:transparent;
+	color:#FF961B;
+	min-height:32px;
+	max-height:32px;
+	min-width:140px;
+	max-width:140px;
+	font-size:14px;
+	border-image:url(:/icon/Tool/login_button.png);
+    background-repeat: no-repeat;
+}
+
+LoginDialog QPushButton#btnCreateHW:hover,LoginDialog QPushButton#btnRegisterLCN:hover
+{
+	background:transparent;
+	color:#FF961B;
+	min-height:32px;
+	max-height:32px;
+	min-width:140px;
+	max-width:140px;
+	font-size:14px;
+	border-image:url(:/icon/Tool/login_buttonhover.png);
+    background-repeat: no-repeat;
+}
+
+MessageBoxDialog
+{
+background: #000000;
+max-width:410px;
+min-width:410px;
+
+max-height:200px;
+min-height:200px;
+}
+MessageBoxDialog QFrame#titleFrame
+{
+	min-height:30px;
+	max-height:30px;
+	background: #1E1E1E;
+	border:none;
+}
+
+MessageBoxDialog QLabel#titleLabel
+{
+	background:transparent;
+	color:#FFFFFF;
+	font-size:14px;
+	qproperty-alignment:AlignCenter;
+}
+
+MessageBoxDialog QPushButton#btnClose
+{
+	background-color: transparent;
+	border:none;
+	min-height:16px;
+	max-height:16px;
+	min-width:16px;
+	max-width:16px;
+	image:url(:/icon/Common/close_off.png);
+}
+
+MessageBoxDialog QPushButton#btnClose:hover,MessageBoxDialog QPushButton#btnClose:pressed
+{
+	background-color: transparent;
+	border:none;
+	min-height:16px;
+	max-height:16px;
+	min-width:16px;
+	max-width:16px;
+	image:url(:/icon/Common/close_on.png);
+}
+
+MessageBoxDialog QFrame#centerFrame
+{
+	border: none;
+	background-color: #2D2D2D;
+	border:1px solid #1E1E1E;
+}
+
+MessageBoxDialog QFrame#messageInfoFrame
+{
+	background:transparent;
+	border:1px solid #252525;
+}
+MessageBoxDialog QPushButton#btnOK
+{
+	background:transparent;
+	color:#FF961B;
+	min-height:30px;
+	max-height:30px;
+	min-width:100px;
+	max-width:100px;
+	font-size:14px;
+	border-image:url(:/icon/Tool/login_button.png);
+	qproperty-icon:url(:/icon/Tool/login_ok.png);
+    background-repeat: no-repeat;
+}
+
+MessageBoxDialog QPushButton#btnOK:hover
+{
+	background:transparent;
+	color:#FF961B;
+	min-height:30px;
+	max-height:30px;
+	min-width:100px;
+	max-width:100px;
+	font-size:14px;
+	border-image:url(:/icon/Tool/login_buttonhover.png);
+	 background-repeat: no-repeat;
+	qproperty-icon:url(:/icon/Tool/login_ok.png);
+}
+
+MessageBoxDialog QPushButton#btnCancel
+{
+	background:transparent;
+	color:#FF961B;
+	min-height:30px;
+	max-height:30px;
+	min-width:100px;
+	max-width:100px;
+	font-size:14px;
+	border-image:url(:/icon/Tool/login_button.png);
+	qproperty-icon:url(:/icon/Tool/login_cancel.png);
+    background-repeat: no-repeat;
+}
+
+MessageBoxDialog QPushButton#btnCancel:hover
+{
+	background:transparent;
+	color:#FF961B;
+	min-height:30px;
+	max-height:30px;
+	min-width:100px;
+	max-width:100px;
+	font-size:14px;
+	border-image:url(:/icon/Tool/login_buttonhover.png);
+	qproperty-icon:url(:/icon/Tool/login_cancel.png);
+    background-repeat: no-repeat;
+}
+
+MessageBoxDialog QTextEdit
+{
+	border:none;
+	background:#252525;
+	font-size:12px;
+	color:#FFFFFF;
+	min-height:80px;
+	max-height:80px;
+	
+}

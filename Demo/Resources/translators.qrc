@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>Translator/RY3D_Login_zh_CN.qm</file>
+        <file>Translator/RY3D_Login_zh_CN.ts</file>
+    </qresource>
+</RCC>
