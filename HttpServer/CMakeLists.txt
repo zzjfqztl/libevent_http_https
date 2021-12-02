@@ -11,6 +11,7 @@ project(${TARGET_NAME} LANGUAGES CXX)
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
 add_definitions(-D GLOG_NO_ABBREVIATED_SEVERITIES)
+add_definitions(-D EVENT__HAVE_OPENSSL)
 
 
 #Qt
