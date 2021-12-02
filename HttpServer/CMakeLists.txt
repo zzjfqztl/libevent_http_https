@@ -115,11 +115,12 @@ target_link_libraries( ${TARGET_NAME} PRIVATE  libevent
 											   wsock32
 											   Iphlpapi
 											   )
+											   
 #target_link_libraries( ${TARGET_NAME} PRIVATE  libeay32
 #											   ssleay32
 #											   )
-#add_custom_command(TARGET ${TARGET_NAME} POST_BUILD        
-#   COMMAND ${CMAKE_COMMAND} -E copy_directory             
-#        "${3RD_PARTY}/glog/bin/" 
-#		"${3RD_PARTY}/openssl/bin/" 
-#        $<TARGET_FILE_DIR:${TARGET_NAME}>)    
+add_custom_command(TARGET ${TARGET_NAME} POST_BUILD        
+   COMMAND ${CMAKE_COMMAND} -E copy_directory             
+        "${3RD_PARTY}/glog/bin/" 
+		"${3RD_PARTY}/sslkey/" 
+        $<TARGET_FILE_DIR:${TARGET_NAME}>)    

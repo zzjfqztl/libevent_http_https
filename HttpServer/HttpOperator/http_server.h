@@ -2,20 +2,36 @@
 
 struct evhttp_request;
 struct evkeyvalq;
+/**
+ * @brief 处理消息接口，需要实现类继承
+*/
 class IHttpHandler
 {
 public:
 	virtual void httpHandlerCallBack(struct evhttp_request* req, void* arg) = 0;
 };
 
+/**
+ * @brief 登录处理
+*/
 class LoginOperator : public IHttpHandler
 {
 public:
+	/**
+	 * @brief 回调函数，供evhttp_set_cb回调使用
+	 * @param req evhttp_request指针
+	 * @param arg 参数
+	*/
 	static void callback(struct evhttp_request* req, void* arg)
 	{
 		LoginOperator().httpHandlerCallBack(req, arg);
 	}
 
+	/**
+	 * @brief 消息处理接口函数
+	 * @param req evhttp_request指针，包含http相关的信息
+	 * @param arg 参数
+	*/
 	virtual void httpHandlerCallBack(struct evhttp_request* req, void* arg);
 
 private:
@@ -51,14 +67,27 @@ private:
 
 };
 
-class DownloadOperator : public IHttpHandler
+/**
+ * @brief 文件操作接口
+*/
+class FilesOperator : public IHttpHandler
 {
 public:
+	/**
+	 * @brief 回调函数，供evhttp_set_cb回调使用
+	 * @param req evhttp_request指针
+	 * @param arg 参数
+	*/
 	static void callback(struct evhttp_request* req, void* arg)
 	{
-		DownloadOperator().httpHandlerCallBack(req, arg);
+		FilesOperator().httpHandlerCallBack(req, arg);
 	}
 
+	/**
+	 * @brief 消息处理接口函数
+	 * @param req evhttp_request指针，包含http相关的信息
+	 * @param arg 参数
+	*/
 	virtual void httpHandlerCallBack(struct evhttp_request* req, void* arg);
 
 private:
@@ -68,6 +97,7 @@ private:
 	 * @param arg
 	*/
 	void getHandler(struct evhttp_request* req, void* arg);
+
 	/**
 	 * @brief 客户端上传文件
 	 * @param req

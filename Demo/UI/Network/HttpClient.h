@@ -91,6 +91,9 @@ public:
 signals:
 
 private:
+    /**
+     * @brief ssl…Ë÷√£¨  ”√”⁄https
+    */
     void setSSlConfig(QNetworkRequest& request);
 };
 

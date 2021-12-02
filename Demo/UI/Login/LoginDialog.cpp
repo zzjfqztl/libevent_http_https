@@ -454,7 +454,7 @@ void LoginDialog::initExtensionFrame()
 
 void LoginDialog::onClose()
 {
-	//reject();
+	reject();
 
 	//QString strUrl = QString("http://127.0.0.1:8081/login");
 	//QString strParameter;// = QString("id=%1&psd=%2").arg(idLineEdit_->text()).arg(pwdLineEdit_->text());
@@ -474,14 +474,7 @@ void LoginDialog::onClose()
 	//	token_ = strtoken;
 	//}
 
-	QString strUrl = QString("http://127.0.0.1:8081/download");
-	QString strReponse;
-	QString strParameter = QString("token=%1&fileid=12.mp4").arg(token_);
-	QString strSavePath = QString("D:/testData/12.mp4");
-	HttpClient httpClient;
-	//int nCode = httpClient.DownloadFileRequest(strUrl, strParameter, strSavePath, true);
-	int nCode = httpClient.uploadFileRequest(strUrl, strParameter, strSavePath, strReponse, true);
-	qDebug() << "nCode=" << nCode << " reponse=" << strReponse;
+
 }
 
 void LoginDialog::onUpDown()
@@ -519,14 +512,6 @@ void LoginDialog::onUpDown()
 
 void LoginDialog::onLogin()
 {
-	/*if (idLineEdit_->text().isEmpty())
-	{
-		MessageBoxDialog* messageBox = new MessageBoxDialog(QObject::tr("Information"), QObject::tr("Please enter the user ID"), MessageBoxDialog::MessageButtonType::MB_OK);
-		messageBox->exec();
-		delete messageBox;
-		messageBox = nullptr;
-		return;
-	}*/
 	if (idLineEdit_->text().isEmpty() || pwdLineEdit_->text().isEmpty())
 	{
 		MessageBoxDialog* messageBox = new MessageBoxDialog(QObject::tr("Information"), QObject::tr("Please enter the user ID or user password"), MessageBoxDialog::MessageButtonType::MB_OK);
@@ -535,29 +520,7 @@ void LoginDialog::onLogin()
 		messageBox = nullptr;
 		return;
 	}
-	/*QString strUrl = QString("http://www.baidu.com");
-	QString token;
-	if (0 != NetworkManager::CheckUserLogin(strUrl, idLineEdit_->text(), pwdLineEdit_->text(), token))
-	{
-		MessageBoxDialog* messageBox = new MessageBoxDialog(QObject::tr("Information"), QObject::tr("Login failed"), MessageBoxDialog::MessageButtonType::MB_OK);
-		messageBox->exec();
-		delete messageBox;
-		messageBox = nullptr;
-		return;
-	}
-	accept();*/
-	/*QString strUrl = QString("http://127.0.0.1:8081/login");
-	QString strParameter = QString("id=%1&psd=%2").arg(idLineEdit_->text()).arg(pwdLineEdit_->text());
-	HttpClient httpClient;
-	QString strReponse;
-	int nCode = httpClient.GetRequest(strUrl, strParameter, strReponse);
-	qDebug() << "nCode=" << nCode << " reponse=" << strReponse;
-	QString strtoken;
-	JsonManager::CheckUserLogin(strReponse, nCode, strtoken);
-	if (!strtoken.isEmpty())
-	{
-		token_ = strtoken;
-	}*/
+
 
 
 	QString strUrl = QString("http://127.0.0.1:8081/login");
@@ -679,30 +642,12 @@ void LoginDialog::onCheckOffline(bool bcheck)
 
 void LoginDialog::onbtnCreateHWClick()
 {
-	//验证http put功能 debug
-	QString strUrl = QString("http://127.0.0.1:8081/login");
-	QString strParameter = QString("token=%1").arg(token_);
-	HttpClient httpClient;
-	QString strReponse;
-	QString strJson;
-	QMap<QString, QVariant> map;
-	map["id"] = idLineEdit_->text();
-	map["psd"] = pwdLineEdit_->text();
-	strJson = JsonManager::GenerateJsonString(map);
-	int nCode = httpClient.PutRequest(strUrl, strParameter, strJson, strReponse);
-	qDebug() << "nCode=" << nCode << " reponse=" << strReponse;
 	
 }
 
 void LoginDialog::onbtnRegisterLCN()
 {
-	//验证http delete功能 debug
-	QString strUrl = QString("http://127.0.0.1:8081/login");
-	QString strParameter = QString("id=%1&token=%2").arg(idLineEdit_->text()).arg(token_);
-	HttpClient httpClient;
-	QString strReponse;
-	int nCode = httpClient.DeleteRequest(strUrl, strParameter, strReponse);
-	qDebug() << "nCode=" << nCode << " reponse=" << strReponse;
+
 }
 
 bool LoginDialog::eventFilter(QObject* watched, QEvent* event)

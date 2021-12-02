@@ -26,13 +26,20 @@
 #include <fstream>
 #include "utils.h"
 #define BUF_MAX 1024*16
-#define FILE_BUF_MAX (1024*16)
 #define HEADER_END_LEN 4
 
-
+/**
+ * @brief 调试使用
+*/
 static QMap<QString, QString> userMap_ = { {"user1","1243"},{"aaa","a123456"},{"zhangsan","z123456"},{"test1","admin"},{"admin","admin123"}};
 static QMap<QString,QString> tokenMap_;
 static QString downloadPath_ = QString("D:/testData/download");
+
+/**
+ * @brief 生成json数据
+ * @param dataMap 键值对数据
+ * @return 
+*/
 QString GenerateJsonString(const QMap<QString, QVariant>& dataMap)
 {
 	if (dataMap.isEmpty())
@@ -56,7 +63,7 @@ QString GenerateJsonString(const QMap<QString, QVariant>& dataMap)
 }
 
 /**
- * @brief 解析post请求数据
+ * @brief 解析post请求数据，用于一次接收到的数据量小于16 * 1024情况
  * @param buf
  * @param req
 */
@@ -83,9 +90,9 @@ void get_post_message(char* buf, struct evhttp_request* req)
 
 /**
  * @brief 解析http头，主要用于get请求时解析uri和请求参数
- * @param req
- * @param params
- * @param query_char
+ * @param req evhttp_request指针
+ * @param params evkeyvalq指针
+ * @param query_char 根据参数获得到的数据
  * @return
 */
 char* find_http_header(struct evhttp_request* req, struct evkeyvalq* params, const char* query_char)
@@ -148,7 +155,7 @@ char* find_http_header(struct evhttp_request* req, struct evkeyvalq* params, con
 }
 
 /**
- * @brief 向客户端发送信息
+ * @brief 向客户端发送信息，一般为结果信息，json数据
  * @param req evhttp_request指针
  * @param QMap<QString,QVariant> 组合成json的列表 
 */
@@ -162,7 +169,6 @@ void reply_http(struct evhttp_request* req, const QMap<QString,QVariant>& retMap
 		printf("====line:%d,%s\n", __LINE__, "retbuff is null.");
 		return;
 	}
-	//std::string strReponse= "{\"result\":\"success\",\"code\":\"0\",\"id\":\"" + std::string(sign) + "\"," + "\"psd\":\"" + std::string(data) + "\"}";
 	QString strRespone = GenerateJsonString(retMap);
 	evbuffer_add_printf(retbuff, strRespone.toUtf8().constData());
 	evhttp_send_reply(req, HTTP_OK, "Client", retbuff);
@@ -201,6 +207,7 @@ bool token_http_check(struct evhttp_request* req)
 
 void LoginOperator::httpHandlerCallBack(struct evhttp_request* req, void* arg)
 {
+	//获取http传送的数据模式
 	switch (evhttp_request_get_command(req))
 	{
 	case EVHTTP_REQ_GET: 
@@ -459,7 +466,7 @@ void LoginOperator::deleteHandler(struct evhttp_request* req, void* arg)
 	reply_http(req, retMap);
 }
 
-void DownloadOperator::httpHandlerCallBack(struct evhttp_request* req, void* arg)
+void FilesOperator::httpHandlerCallBack(struct evhttp_request* req, void* arg)
 {
 	switch (evhttp_request_get_command(req))
 	{
@@ -479,7 +486,7 @@ void DownloadOperator::httpHandlerCallBack(struct evhttp_request* req, void* arg
 
 }
 
-void DownloadOperator::getHandler(struct evhttp_request* req, void* arg)
+void FilesOperator::getHandler(struct evhttp_request* req, void* arg)
 {
 	if (req == NULL)
 	{
@@ -494,12 +501,13 @@ void DownloadOperator::getHandler(struct evhttp_request* req, void* arg)
 	}
 	else
 	{
-		char* sign = NULL;
+		char* fileid = NULL;
 		struct evkeyvalq sign_params = { 0 };
 		retMap["result"] = "success";
 		retMap["code"] = "0";
-		sign = find_http_header(req, &sign_params, "fileid");//获取get请求uri中的sign参数
-		if (sign == NULL)
+		//解析url数据的fileid参数，获取客户端请求下载的文件
+		fileid = find_http_header(req, &sign_params, "fileid");//获取get请求uri中的sign参数
+		if (fileid == NULL)
 		{
 			retMap["result"] = "failed";
 			retMap["code"] = "1";
@@ -507,20 +515,18 @@ void DownloadOperator::getHandler(struct evhttp_request* req, void* arg)
 		}
 		else
 		{
-			std::string fileName = Utf8ToGbk(sign);
-			//retMap["id"] = sign;
+			std::string fileName = Utf8ToGbk(fileid); //客户端可能传送的是GBK数据，含有中文，而服务端接收到的utf8,要进行转换，不然中文乱码
 			printf("====line:%d,get request param: id=[%s]\n", __LINE__, fileName.c_str());
 
 			fileName = downloadPath_.toStdString()+"/"+ fileName;
 			FILE* fp = fopen(fileName.c_str(), "rb");
-			if (!fp)
+			if (!fp) //文件打开失败
 			{
 				retMap["result"] = "failed";
 				retMap["code"] = "2";
 				reply_http(req, retMap);
 				return;
 			}
-
 			//2 回复浏览器
 			//状态行， 消息报头， 响应正文
 			evbuffer* outbuf = evhttp_request_get_output_buffer(req);
@@ -544,7 +550,7 @@ void DownloadOperator::getHandler(struct evhttp_request* req, void* arg)
 	reply_http(req, retMap);
 }
 
-void DownloadOperator::postHandler(struct evhttp_request* req, void* arg)
+void FilesOperator::postHandler(struct evhttp_request* req, void* arg)
 {
 	if (req == NULL)
 	{
@@ -562,8 +568,7 @@ void DownloadOperator::postHandler(struct evhttp_request* req, void* arg)
 		std::ofstream outfile;
 		struct evbuffer* buf;
 		buf = evbuffer_new();
-		const int	MSG_DATA_SIZE = 15000;
-		char		body_data[MSG_DATA_SIZE] = { 0 };
+		char		body_data[BUF_MAX] = { 0 };
 		int			body_datalen = 0;
 		//get data from post
 		memset(body_data, 0, sizeof(body_data));
@@ -576,7 +581,7 @@ void DownloadOperator::postHandler(struct evhttp_request* req, void* arg)
 		while (len_of_file_to_recv < req->body_size)
 		{
 			body_datalen = evbuffer_remove(req->input_buffer, body_data, sizeof(body_data));
-			if (body_datalen > MSG_DATA_SIZE)
+			if (body_datalen > BUF_MAX)
 			{
 				buf = evbuffer_new();
 				evbuffer_add_printf(buf, "%s", "HTTP_DATALENTOLANG");
@@ -588,8 +593,9 @@ void DownloadOperator::postHandler(struct evhttp_request* req, void* arg)
 			}
 			else if (is_first)
 			{
+				//获取上传的文件名
 				std::string buf_in = body_data;
-				size_t		loc = buf_in.find("\r\n\r\n");
+				size_t		loc = buf_in.find("\r\n\r\n"); //"\r\n\r\n"之后的为文件内容
 				size_t		loc_filename = -1;
 
 				//get file description, and extract the file name
@@ -625,6 +631,7 @@ void DownloadOperator::postHandler(struct evhttp_request* req, void* arg)
 					}
 					file_name_front = Utf8ToGbk(filename);
 					std::string strPath = downloadPath_.toStdString() + "/" + file_name_front.c_str();
+					//本地已存在同名文件，则以文件名+当前事件生成新的文件名
 					if (QFile::exists(strPath.c_str()))
 					{
 						//get the filetype
@@ -658,7 +665,7 @@ void DownloadOperator::postHandler(struct evhttp_request* req, void* arg)
 					std::string strPath = downloadPath_.toStdString() + "/"+file_name_front.c_str();
 					outfile.open(strPath, std::ios::binary | std::ios::app);
 				}
-
+				//写文件
 				outfile.write(buf_in_char, body_datalen - (loc + HEADER_END_LEN)); //minus size of file description
 
 				len_of_file_to_recv += body_datalen;

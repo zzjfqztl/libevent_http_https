@@ -8,6 +8,11 @@ using namespace std;
 #ifdef _WIN32
 #include <windows.h>
 
+/**
+ * @brief GBK×Ö·û´®×ªUtf8×Ö·û´®
+ * @param src_str Ô­×Ö·û´®
+ * @return ×ª»»ºóµÄutf8×Ö·û´®
+*/
 string GbkToUtf8(const char *src_str)
 {
 	int len = MultiByteToWideChar(CP_ACP, 0, src_str, -1, NULL, 0);
@@ -24,6 +29,11 @@ string GbkToUtf8(const char *src_str)
 	return strTemp;
 }
 
+/**
+ * @brief Utf8×Ö·û´®×ªGBK×Ö·û´®
+ * @param src_str Ô­×Ö·û´®
+ * @return ×ª»»ºóµÄGBK×Ö·û´®
+*/
 string Utf8ToGbk(const char *src_str)
 {
 	int len = MultiByteToWideChar(CP_UTF8, 0, src_str, -1, NULL, 0);

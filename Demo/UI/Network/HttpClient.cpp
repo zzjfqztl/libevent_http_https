@@ -55,6 +55,10 @@ int HttpClient::GetRequest(const QString& strUrl, const QString& strParamers, QS
 	request.setUrl(qurl);
 	DLOG(INFO) << "Get URL: " << qurl.toString().toLocal8Bit().constData();
 	request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded; charset=utf-8");
+	if (strUrl.startsWith("https://"))
+	{
+		setSSlConfig(request);
+	}
 	//发送Get请求
 	QNetworkAccessManager manager;
 	QNetworkReply* reply = manager.get(request);
@@ -79,30 +83,6 @@ int HttpClient::GetRequest(const QString& strUrl, const QString& strParamers, QS
 	reply->deleteLater();
 	return nerror;
 
-	////解析返回的Json结果
-	//QByteArray replyData = reply->readAll();
-	//QJsonParseError json_error;
-	//QJsonDocument jsonDoc(QJsonDocument::fromJson(replyData, &json_error));
-	//if (json_error.error != QJsonParseError::NoError)
-	//{
-	//	return -1;
-	//}
-	//QJsonObject rootObj = jsonDoc.object();
-	//QString codeStr = rootObj.value("code").toString();
-	//if (codeStr.compare("200") == 0)
-	//{
-	//	//返回代码为200的时候证明请求成功对包含的结构数据进行处理
-	//	if (rootObj.contains("result"))
-	//	{
-
-	//	}
-	//	return 0;
-	//}
-	//else
-	//{
-	//	//请求失败对对应的处理
-	//	return codeStr.toInt();
-	//}
 }
 
 int HttpClient::PostRequest(const QString& strUrl, const QString& strParamers, const QString& strJson, QString& strReponse, bool bJson /*= true*/, bool isAsync /*= true*/)
@@ -194,7 +174,10 @@ int HttpClient::PutRequest(const QString& strUrl, const QString& strParamers, co
 			return -1;
 		}
 	}
-
+	if (strUrl.startsWith("https://"))
+	{
+		setSSlConfig(request);
+	}
 	QByteArray data = strJson.toUtf8();
 	//发送PUT请求
 	QNetworkAccessManager manager;
@@ -230,6 +213,10 @@ int HttpClient::DeleteRequest(const QString& strUrl, const QString& strParamers,
 	request.setUrl(qurl);
 	DLOG(INFO) << "Delete URL: " << qurl.toString().toLocal8Bit().constData();
 	request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded; charset=utf-8");
+	if (strUrl.startsWith("https://"))
+	{
+		setSSlConfig(request);
+	}
 	//发送Delete请求
 	QNetworkAccessManager manager;
 	QNetworkReply* reply = manager.deleteResource(request);
@@ -263,7 +250,10 @@ int HttpClient::DownloadFileRequest(const QString& strUrl, const QString& strPar
 	QUrl qurl(fullRequest);
 	request.setUrl(qurl);
 	DLOG(INFO) << "DownloadFile URL: " << qurl.toString().toLocal8Bit().constData();
-
+	if (strUrl.startsWith("https://"))
+	{
+		setSSlConfig(request);
+	}
 	QString strSaveFile = savePath;
 	strSaveFile = QDir::fromNativeSeparators(strSaveFile);
 	if (strSaveFile.endsWith("/"))
@@ -276,17 +266,9 @@ int HttpClient::DownloadFileRequest(const QString& strUrl, const QString& strPar
 		QDir().mkpath(strSaveFile.mid(0, strSaveFile.lastIndexOf("/")));
 	}
 	QFile::remove(strSaveFile);
+
 	QNetworkAccessManager manager;
-	/*connect(&manager, &QNetworkAccessManager::authenticationRequired, this, [&](QNetworkReply* networkreply, QAuthenticator* auth){
-		auth->setUser(QString("VP4YSTVNPUNU7VCLONM6"));
-		auth->setPassword(QString("2kNJGOWBb0ygkZmX49uyTPzfyezbTcCxJ1Wf45kn"));
-});*/
-//#ifndef QT_NO_SSL
-//	connect(&manager, &QNetworkAccessManager::sslErrors,
-//		this, [&](QNetworkReply* networkReply, const QList<QSslError>& error) {
-//			networkReply->ignoreSslErrors();
-//		});
-//#endif
+	
 	QEventLoop eventLoop;
 	QNetworkReply* reply = manager.get(request);
 
@@ -330,19 +312,6 @@ int HttpClient::uploadFileRequest(const QString& strUrl, const QString& strParam
 	QEventLoop eventLoop;
 	QObject::connect(&manager, SIGNAL(finished(QNetworkReply*)), &eventLoop, SLOT(quit()));
 	QHttpMultiPart* multiPart = new QHttpMultiPart(QHttpMultiPart::FormDataType);
-	//QHttpPart showPart;
-	///*showPart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant("form-data; name=\"action\""));
-	//showPart.setBody("show");*/
-	//showPart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant("form-data; name=\"filecount\""));
-	//showPart.setBody("1");
-	//multiPart->append(showPart);
-
-	/*QHttpPart uPart;
-	uPart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant("form-data; name=\"uploadway\""));
-	uPart.setBody("qt");
-	multiPart->append(uPart);*/
-	
-	
 	QHttpPart filePart;
 
 	QString suffix = file_info.suffix();
@@ -384,22 +353,15 @@ int HttpClient::uploadFileRequest(const QString& strUrl, const QString& strParam
 		, QVariant(strContent));
 	QFile* file = new QFile(uploadfile);
 	file->open(QIODevice::ReadOnly);
-	/*QByteArray bytes = file->readAll();
-	filePart.setBody(bytes);*/
 
 	filePart.setBodyDevice(file);
 	file->setParent(multiPart); // we cannot delete the file now, so delete it with the multiPart
 	multiPart->append(filePart);
 
-	//QHttpPart suffixPart;
-	//suffixPart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant("form-data; name=\"file1\""));
-	//suffixPart.setBody(fileName.toUtf8());
-	//multiPart->append(suffixPart);
-
-	/*QHttpPart sumitPart;
-	sumitPart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant("form-data; name=\"fileToUpload\""));
-	sumitPart.setBody("fileToUpload");
-	multiPart->append(sumitPart);*/
+	/*QHttpPart suffixPart;
+	suffixPart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant("form-data; name=\"sufix\""));
+	suffixPart.setBody(suffix.toUtf8());
+	multiPart->append(suffixPart);*/
 
 	QString requestHeader = strUrl;
 	QString fullRequest = requestHeader + (strParamers.isEmpty() ? "" : QString("?%1").arg(strParamers.toUtf8().constData()));
@@ -407,7 +369,10 @@ int HttpClient::uploadFileRequest(const QString& strUrl, const QString& strParam
 	QNetworkRequest request;
 	request.setUrl(qurl);
 	DLOG(INFO) << "UploadFile URL: " << qurl.toString().toLocal8Bit().constData();
-
+	if (strUrl.startsWith("https://"))
+	{
+		setSSlConfig(request);
+	}
 
 	QNetworkReply* reply = manager.post(request, multiPart);
 	multiPart->setParent(reply); // delete the multiPart with the reply

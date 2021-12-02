@@ -46,9 +46,11 @@ static void *my_zeroing_malloc (size_t howmuch)
 
 void common_setup (void)
 { 
-    //signal (SIGPIPE, SIG_IGN);
+#ifndef WIN32
+    signal (SIGPIPE, SIG_IGN);
 
-    //CRYPTO_set_mem_functions (my_zeroing_malloc, realloc, free);
+    CRYPTO_set_mem_functions (my_zeroing_malloc, realloc, free);
+#endif
     SSL_library_init ();
     SSL_load_error_strings ();
     OpenSSL_add_all_algorithms ();
